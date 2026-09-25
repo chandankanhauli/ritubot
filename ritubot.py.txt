@@ -17,7 +17,7 @@ def run_web():
         print(f"Server Error: {e}")
 
 # आपकी दोनों असली चाबियाँ बिल्कुल सही फिट की हुई
-TELEGRAM_TOKEN = "8947206695:AAGre09wwYDm-7RiH_iT7EzXlcr8orTi-U4"
+TELEGRAM_TOKEN = "8947206695:AAE7ogoElzhk6LbWd4j06eprCQBPT46btqI"
 GEMINI_API_KEY = "AQ.Ab8RN6Iy_SeSZG8nVUZoBZCoZMiZbPdWNVQOThOLSwO_YHmKbw"
 
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
