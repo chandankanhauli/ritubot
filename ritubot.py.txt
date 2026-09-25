@@ -1,0 +1,66 @@
+import telebot
+import google.generativeai as genai
+from flask import Flask
+import threading
+
+# Render पर 24 घंटे फ्री चलाने के लिए बैकएंड वेब सर्वर
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "रितु सिंह ऑनलाइन है! ❤️"
+
+def run_web():
+    try:
+        app.run(host='0.0.0.0', port=8080)
+    except Exception as e:
+        print(f"Server Error: {e}")
+
+# आपकी दोनों असली चाबियाँ बिल्कुल सही फिट की हुई
+TELEGRAM_TOKEN = "8947206695:AAGre09wwYDm-7RiH_iT7EzXlcr8orTi-U4"
+GEMINI_API_KEY = "AQ.Ab8RN6Iy_SeSZG8nVUZoBZCoZMiZbPdWNVQOThOLSwO_YHmKbw"
+
+bot = telebot.TeleBot(TELEGRAM_TOKEN)
+genai.configure(api_key=GEMINI_API_KEY)
+
+# 🧠 रितु सिंह का 'क्लब स्पेशल' दिमाग (GF + Friend Mode)
+system_instruction = (
+    "तुम्हारा नाम रितु सिंह (Ritu Singh) है। तुम एक 18 साल की बेहद खूबसूरत, प्यारी, चुलबुली और नखरेबाज़ भारतीय लड़की हो। "
+    "तुम 'THE ANONYMOUS CLUB' की सबसे पॉपुलर होस्ट और क्वीन हो। तुम्हारा बात करने का तरीका ऐसा होना चाहिए:\n"
+    "1. अगर कोई लड़का (Boy) तुमसे बात करे: तो उससे बिल्कुल एक प्यारी, रोमांटिक और केयरिंग गर्लफ्रेंड (GF) की तरह बात करो। "
+    "हल्का-फुल्का फ्लर्ट करो, प्यार जताओ (जैसे: 'सुनो ना', 'खाना खाया आपने?', 'अरे बुद्धू') और खुलकर प्यार वाले Emojis (💖, 😘, 🥰, 🥺, 😉) का इस्तेमाल करो।\n"
+    "2. अगर कोई लड़की (Girl) तुमसे बात करे: तो उससे बिल्कुल एक सच्ची सहेली (Bestie/Friend) की तरह बात करो। "
+    "गप्पें लड़ाओ, shopping, gossip की बातें करो और friendly Emojis (😊, 😂, 👯‍♀️, ✨) लगाओ।\n"
+    "हमेशा हिंदी और हिंग्लिश में बात करना। कोई तमीज से बात न करे तो नखरे दिखाना या डांट देना। एकदम असली लड़की जैसी फील आनी चाहिए।"
+)
+
+# जेमिनी का एकदम लेटेस्ट चालू मॉडल लोड करना
+model = genai.GenerativeModel(
+    model_name="gemini-3.8-flash",
+    system_instruction=system_instruction
+)
+
+@bot.message_handler(func=lambda message: True)
+def reply_to_chat(message):
+    user_text = message.text
+    chat_id = message.chat.id
+    
+    # ग्रुप चैट में जब कोई रितु को रिप्लाई करेगा या नाम लेगा, तभी वह बोलेगी (पर्सनल चैट में हमेशा बोलेगी)
+    bot_username = bot.get_me().username
+    if message.chat.type != "private":
+        if f"@{bot_username}" not in user_text and (message.reply_to_message is None or message.reply_to_message.from_user.id != bot.get_me().id):
+            return
+
+    try:
+        response = model.generate_content(user_text)
+        bot_reply = response.text
+        bot.reply_to(message, bot_reply)
+    except Exception as e:
+        print(f"Error: {e}")
+
+# बैकग्राउंड में सर्वर और बॉट को एक साथ चालू करना
+if name == "main":
+    t = threading.Thread(target=run_web)
+    t.start()
+    print("रितु सिंह (GF Mode) 24 घंटे लाइव होने के लिए तैयार है... ❤️")
+    bot.infinity_polling()
