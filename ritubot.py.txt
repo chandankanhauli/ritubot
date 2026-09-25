@@ -18,7 +18,7 @@ def run_web():
 
 # आपकी दोनों असली चाबियाँ बिल्कुल सही फिट की हुई
 TELEGRAM_TOKEN = "8947206695:AAF8w8mcgDLPiRnn2MZRzxY6lzSh9HYTqcE"
-GEMINI_API_KEY = "AQ.Ab8RN6Iy_SeSZG8nVUZoBZCoZMiZbPdWNVQOThOLSwO_YHmKbw"
+GEMINI_API_KEY = "AQ.Ab8RN6LcskkFxfxrPS3K2TTngj564zzNOj9SOveViS0CUTjbXQ"
 
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 genai.configure(api_key=GEMINI_API_KEY)
