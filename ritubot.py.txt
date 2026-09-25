@@ -59,7 +59,7 @@ def reply_to_chat(message):
         print(f"Error: {e}")
 
 # बैकग्राउंड में सर्वर और बॉट को एक साथ चालू करना
-if name == "main":
+if  __name__ == "__main__":
     t = threading.Thread(target=run_web)
     t.start()
     print("रितु सिंह (GF Mode) 24 घंटे लाइव होने के लिए तैयार है... ❤️")
